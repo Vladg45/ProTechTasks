@@ -10,17 +10,47 @@ namespace DriverFinder.Controllers
     public class DriversController : Controller
     {
         private readonly IDriverFinderAlg _bruteForceNearest;
+        private readonly IDriverFinderAlg _priorityQueueNearest;
+        private readonly IDriverFinderAlg _quickSelectNearest;
+        private readonly IDriverFinderAlg _radiusExpansionNearest;
 
         public DriversController()
         {
             _bruteForceNearest = new BruteForceNearest();
+            _priorityQueueNearest = new PriorityQueueNearest();
+            _quickSelectNearest = new QuickSelectNearest();
+            _radiusExpansionNearest = new RadiusExpansionNearest();
         }
-
+        
         [HttpPost("nearest/bruteforce")]
         public ActionResult<List<Driver>> FindNearestBruteFouce([FromBody] Order order)
         {
             var drivers = GetTestDrivers();
             var result = _bruteForceNearest.FindDrivers(drivers, order, 5);
+            return Ok(result);
+        }
+
+        [HttpPost("nearest/priorityqueue")]
+        public ActionResult<List<Driver>> FindNearestPriorityQueue([FromBody] Order order)
+        {
+            var drivers = GetTestDrivers();
+            var result = _priorityQueueNearest.FindDrivers(drivers, order, 5);
+            return Ok(result);
+        }
+
+        [HttpPost("nearest/quickselect")]
+        public ActionResult<List<Driver>> FindNearestQuickSelect([FromBody] Order order)
+        {
+            var drivers = GetTestDrivers();
+            var result = _quickSelectNearest.FindDrivers(drivers, order, 5);
+            return Ok(result);
+        }
+
+        [HttpPost("nearest/radiusexpansion")]
+        public ActionResult<List<Driver>> FindNearestRadiusExpansion([FromBody] Order order)
+        {
+            var drivers = GetTestDrivers();
+            var result = _radiusExpansionNearest.FindDrivers(drivers, order, 5);
             return Ok(result);
         }
 
@@ -42,7 +72,7 @@ namespace DriverFinder.Controllers
             };
         }
 
-        // Генерация новых водителей
+        // Генерация новых водителей с разными координатами
         private List<Driver> GenerateTestDrivers(int count)
         {
             var random = new Random(42);
