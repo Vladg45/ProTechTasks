@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>DriverFinder.Benchmarks.ScalabilityBenchmarks-20251112-232422</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.15.6, Windows 11 (10.0.26100.7171/24H2/2024Update/HudsonValley)
+AMD Ryzen 5 6600H with Radeon Graphics 3.30GHz, 1 CPU, 12 logical and 6 physical cores
+.NET SDK 9.0.204
+  [Host]     : .NET 6.0.36 (6.0.36, 6.0.3624.51421), X64 RyuJIT x86-64-v3
+  DefaultJob : .NET 6.0.36 (6.0.36, 6.0.3624.51421), X64 RyuJIT x86-64-v3
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>Method               </th><th>DriverCount</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Gen0</th><th>Gen1</th><th>Gen2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>BruteForce_Scalability</td><td>100</td><td>1.425 &mu;s</td><td>0.0089 &mu;s</td><td>0.0083 &mu;s</td><td>0.0191</td><td>-</td><td>-</td><td>2040 B</td>
+</tr><tr><td>PriorityQueue_Scalability</td><td>100</td><td>2.061 &mu;s</td><td>0.0171 &mu;s</td><td>0.0160 &mu;s</td><td>0.0076</td><td>-</td><td>-</td><td>960 B</td>
+</tr><tr><td>QuickSelect_Scalability</td><td>100</td><td>1.268 &mu;s</td><td>0.0072 &mu;s</td><td>0.0064 &mu;s</td><td>0.0134</td><td>-</td><td>-</td><td>1536 B</td>
+</tr><tr><td>RadiusExpansion_Scalability</td><td>100</td><td>17.114 &mu;s</td><td>0.0984 &mu;s</td><td>0.0920 &mu;s</td><td>0.0305</td><td>-</td><td>-</td><td>3640 B</td>
+</tr><tr><td>BruteForce_Scalability</td><td>1000</td><td>8.812 &mu;s</td><td>0.0394 &mu;s</td><td>0.0368 &mu;s</td><td>0.1526</td><td>-</td><td>-</td><td>16440 B</td>
+</tr><tr><td>PriorityQueue_Scalability</td><td>1000</td><td>10.119 &mu;s</td><td>0.0685 &mu;s</td><td>0.0607 &mu;s</td><td>-</td><td>-</td><td>-</td><td>960 B</td>
+</tr><tr><td>QuickSelect_Scalability</td><td>1000</td><td>2.668 &mu;s</td><td>0.0097 &mu;s</td><td>0.0090 &mu;s</td><td>0.0801</td><td>-</td><td>-</td><td>8736 B</td>
+</tr><tr><td>RadiusExpansion_Scalability</td><td>1000</td><td>32.494 &mu;s</td><td>0.1671 &mu;s</td><td>0.1563 &mu;s</td><td>0.2441</td><td>-</td><td>-</td><td>31528 B</td>
+</tr><tr><td>BruteForce_Scalability</td><td>10000</td><td>151.560 &mu;s</td><td>0.9914 &mu;s</td><td>0.8789 &mu;s</td><td>1.4648</td><td>-</td><td>-</td><td>160440 B</td>
+</tr><tr><td>PriorityQueue_Scalability</td><td>10000</td><td>80.991 &mu;s</td><td>1.6154 &mu;s</td><td>1.3490 &mu;s</td><td>-</td><td>-</td><td>-</td><td>960 B</td>
+</tr><tr><td>QuickSelect_Scalability</td><td>10000</td><td>45.024 &mu;s</td><td>0.4966 &mu;s</td><td>0.4147 &mu;s</td><td>0.7935</td><td>-</td><td>-</td><td>80736 B</td>
+</tr><tr><td>RadiusExpansion_Scalability</td><td>10000</td><td>493.369 &mu;s</td><td>9.7760 &mu;s</td><td>15.5058 &mu;s</td><td>10.7422</td><td>10.7422</td><td>10.7422</td><td>283598 B</td>
+</tr></tbody></table>
+</body>
+</html>
