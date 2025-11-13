@@ -47,6 +47,22 @@
   },
   {
     "ContainingType": "DriverFinder.Controllers.DriversController",
+    "Method": "AssignDriverToOrder",
+    "RelativePath": "api/drivers/assign",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderRequest",
+        "Type": "DriverFinder.Models.OrderRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DriverFinder.Controllers.DriversController",
     "Method": "UpdateDriverCoordinates",
     "RelativePath": "api/drivers/coordinates",
     "HttpMethod": "POST",

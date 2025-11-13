@@ -9,24 +9,41 @@ namespace DriverFinder.Controllers
     [Route("api/drivers")]
     public class DriversController : Controller
     {
-        private readonly IDriverFinderAlg _bruteForceNearest;
-        private readonly IDriverFinderAlg _priorityQueueNearest;
         private readonly IDriverFinderAlg _quickSelectNearest;
-        private readonly IDriverFinderAlg _radiusExpansionNearest;
         private readonly IDriverService _driverService;
+        private readonly IDriverAssignmentService _driverAssignmentService;
         private readonly MapSettings _mapSettings;
 
-        public DriversController(IDriverService driverService, IConfiguration configuration)
+        public DriversController(IDriverService driverService, IDriverAssignmentService driverAssignmentService, IConfiguration configuration)
         {
-            _bruteForceNearest = new BruteForceNearest();
-            _priorityQueueNearest = new PriorityQueueNearest();
             _quickSelectNearest = new QuickSelectNearest();
-            _radiusExpansionNearest = new RadiusExpansionNearest();
             _driverService = driverService;
+            _driverAssignmentService = driverAssignmentService;
 
             // Загружаем настройки карты
             _mapSettings = configuration.GetSection("MapSettings").Get<MapSettings>()
                 ?? new MapSettings { N = 100, M = 100 }; // значения по умолчанию
+        }
+
+        [HttpPost("assign")]
+        public async Task<IActionResult> AssignDriverToOrder([FromBody] OrderRequest orderRequest)
+        {
+            if (orderRequest.X < 0 || orderRequest.X >= _mapSettings.N ||
+                orderRequest.Y < 0 || orderRequest.Y >= _mapSettings.M)
+            {
+                return BadRequest(new { error = "Координаты некорректны" });
+            }
+
+            // Поиск водителя для заказа
+            var assignment = await _driverAssignmentService.AssignDriverToOrderAsync(
+                orderRequest, _mapSettings.N, _mapSettings.M);
+
+            if (assignment == null)
+            {
+                return BadRequest(new { error = "Свободных водителей нет" });
+            }
+
+            return Ok(assignment);
         }
 
         [HttpPost("coordinates")]
