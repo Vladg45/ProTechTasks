@@ -1,7 +1,7 @@
 # Driver Finder Project
-Тестовые задания для стажеров по C# на платформе PROtech.
+Первое тестовое задание для стажеров по C# на платформе PROtech.
 
-## Было реализованы следующие задачи:
+## В этой ветке были реализованы следующие задачи:
 1. Реализовано 4 алгоритма поиска ближайших водителей. Самый производительный алгоритм из реализованных: QuickSelectNearest.
 2. Проведено сравнение производительности алгоритмов с помощью BenchmarkDotNet. Результаты приведены ниже:
 <img width="719" height="553" alt="Benchmark1" src="https://github.com/user-attachments/assets/6dd46d0f-3159-43ba-8410-e5821beb49d9" />
@@ -16,9 +16,9 @@
 
 ___
 
-Test tasks for C# interns on the PROtech platform.
+The first test assignment for C# interns on the PROtech platform.
 
-## The following tasks have been implemented:
+## The following tasks have been implemented in this branch:
 1. 4 algorithms have been implemented to find the nearest drivers. The most productive algorithm implemented is QuickSelectNearest.
 2. The performance of algorithms was compared using BenchmarkDotNet. The results are shown below:
 <img width="719" height="553" alt="Benchmark1" src="https://github.com/user-attachments/assets/6dd46d0f-3159-43ba-8410-e5821beb49d9" />
@@ -30,3 +30,4 @@ Test tasks for C# interns on the PROtech platform.
    - (POST) /api/drivers/nearest/priorityqueue – using the PriorityQueueNearest algorithm;
    - (POST) /api/drivers/nearest/quickselect – using the QuickSelectNearest algorithm;
    - (POST) /api/drivers/nearest/radiusexpansion – using the RadiusExpansionNearest algorithm.
+
