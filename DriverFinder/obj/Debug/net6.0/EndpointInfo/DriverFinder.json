@@ -1,8 +1,9 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "DriverFinder",
-    "version": "1.0"
+    "title": "Driver Finder API",
+    "description": "API для поиска и управления водителями",
+    "version": "v1"
   },
   "paths": {
     "/api/drivers/assign": {
@@ -198,6 +199,18 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/status/requests": {
+      "get": {
+        "tags": [
+          "Status"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
           }
         }
       }

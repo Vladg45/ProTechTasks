@@ -13,12 +13,21 @@ namespace DriverFinder.Controllers
         private readonly IDriverService _driverService;
         private readonly IDriverAssignmentService _driverAssignmentService;
         private readonly MapSettings _mapSettings;
+        private readonly IRequestLimiter _requestLimiter;
+        private readonly ILogger<DriversController> _logger;
 
-        public DriversController(IDriverService driverService, IDriverAssignmentService driverAssignmentService, IConfiguration configuration)
+        public DriversController(
+            IDriverService driverService,
+            IDriverAssignmentService driverAssignmentService,
+            IRequestLimiter requestLimiter,
+            IConfiguration configuration,
+            ILogger<DriversController> logger)
         {
             _quickSelectNearest = new QuickSelectNearest();
             _driverService = driverService;
             _driverAssignmentService = driverAssignmentService;
+            _requestLimiter = requestLimiter;
+            _logger = logger;
 
             // Загружаем настройки карты
             _mapSettings = configuration.GetSection("MapSettings").Get<MapSettings>()
@@ -28,6 +37,8 @@ namespace DriverFinder.Controllers
         [HttpPost("assign")]
         public async Task<IActionResult> AssignDriverToOrder([FromBody] OrderRequest orderRequest)
         {
+            _logger.LogInformation($"Обработка запроса assign. Текущие запросы: {_requestLimiter.GetCurrentRequests()}");
+
             if (orderRequest.X < 0 || orderRequest.X >= _mapSettings.N ||
                 orderRequest.Y < 0 || orderRequest.Y >= _mapSettings.M)
             {
@@ -49,6 +60,8 @@ namespace DriverFinder.Controllers
         [HttpPost("coordinates")]
         public IActionResult UpdateDriverCoordinates([FromBody] UpdateDriverCoordinatesRequest request)
         {
+            _logger.LogInformation($"Обработка запроса coordinates. Текущие запросы: {_requestLimiter.GetCurrentRequests()}");
+
             // Проверяем корректность координат
             if (request.X < 0 || request.X >= _mapSettings.N || request.Y < 0 || request.Y >= _mapSettings.M)
             {

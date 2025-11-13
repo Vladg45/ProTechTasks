@@ -102,5 +102,15 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "DriverFinder.Controllers.StatusController",
+    "Method": "GetRequestStatus",
+    "RelativePath": "api/status/requests",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   }
 ]
