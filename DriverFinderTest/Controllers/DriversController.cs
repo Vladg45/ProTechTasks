@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using DriverFinder.Models;
-using DriverFinder.Algorithms;
+using DriverFinder.Tests.Models;
+using DriverFinder.Tests.Algorithms;
 
-namespace DriverFinder.Controllers
+namespace DriverFinder.Tests.Controllers
 {
     [ApiController]
     [Route("api/drivers")]

@@ -1,6 +1,6 @@
-﻿using DriverFinder.Models;
+﻿using DriverFinder.Tests.Models;
 
-namespace DriverFinder.Algorithms
+namespace DriverFinder.Tests.Algorithms
 {
     public class RadiusExpansionNearest : IDriverFinderAlg
     {
