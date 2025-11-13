@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using DriverFinder.Models;
 using DriverFinder.Algorithms;
+using DriverFinder.Services;
 
 namespace DriverFinder.Controllers
 {
@@ -9,67 +9,111 @@ namespace DriverFinder.Controllers
     [Route("api/drivers")]
     public class DriversController : Controller
     {
-        private readonly IDriverFinderAlg _bruteForceNearest;
-        private readonly IDriverFinderAlg _priorityQueueNearest;
         private readonly IDriverFinderAlg _quickSelectNearest;
-        private readonly IDriverFinderAlg _radiusExpansionNearest;
+        private readonly IDriverService _driverService;
+        private readonly IDriverAssignmentService _driverAssignmentService;
+        private readonly MapSettings _mapSettings;
+        private readonly IRequestLimiter _requestLimiter;
+        private readonly ILogger<DriversController> _logger;
 
-        public DriversController()
+        public DriversController(
+            IDriverService driverService,
+            IDriverAssignmentService driverAssignmentService,
+            IRequestLimiter requestLimiter,
+            IConfiguration configuration,
+            ILogger<DriversController> logger)
         {
-            _bruteForceNearest = new BruteForceNearest();
-            _priorityQueueNearest = new PriorityQueueNearest();
             _quickSelectNearest = new QuickSelectNearest();
-            _radiusExpansionNearest = new RadiusExpansionNearest();
-        }
-        
-        [HttpPost("nearest/bruteforce")]
-        public ActionResult<List<Driver>> FindNearestBruteFouce([FromBody] Order order)
-        {
-            var drivers = GetTestDrivers();
-            var result = _bruteForceNearest.FindDrivers(drivers, order, 5);
-            return Ok(result);
+            _driverService = driverService;
+            _driverAssignmentService = driverAssignmentService;
+            _requestLimiter = requestLimiter;
+            _logger = logger;
+
+            // Загружаем настройки карты
+            _mapSettings = configuration.GetSection("MapSettings").Get<MapSettings>()
+                ?? new MapSettings { N = 100, M = 100 }; // значения по умолчанию
         }
 
-        [HttpPost("nearest/priorityqueue")]
-        public ActionResult<List<Driver>> FindNearestPriorityQueue([FromBody] Order order)
+        [HttpPost("assign")]
+        public async Task<IActionResult> AssignDriverToOrder([FromBody] OrderRequest orderRequest)
         {
-            var drivers = GetTestDrivers();
-            var result = _priorityQueueNearest.FindDrivers(drivers, order, 5);
-            return Ok(result);
+            _logger.LogInformation($"Обработка запроса assign. Текущие запросы: {_requestLimiter.GetCurrentRequests()}");
+
+            if (orderRequest.X < 0 || orderRequest.X >= _mapSettings.N ||
+                orderRequest.Y < 0 || orderRequest.Y >= _mapSettings.M)
+            {
+                return BadRequest(new { error = "Координаты некорректны" });
+            }
+
+            // Поиск водителя для заказа
+            var assignment = await _driverAssignmentService.AssignDriverToOrderAsync(
+                orderRequest, _mapSettings.N, _mapSettings.M);
+
+            if (assignment == null)
+            {
+                return BadRequest(new { error = "Свободных водителей нет" });
+            }
+
+            return Ok(assignment);
         }
 
-        [HttpPost("nearest/quickselect")]
+        [HttpPost("coordinates")]
+        public IActionResult UpdateDriverCoordinates([FromBody] UpdateDriverCoordinatesRequest request)
+        {
+            _logger.LogInformation($"Обработка запроса coordinates. Текущие запросы: {_requestLimiter.GetCurrentRequests()}");
+
+            // Проверяем корректность координат
+            if (request.X < 0 || request.X >= _mapSettings.N || request.Y < 0 || request.Y >= _mapSettings.M)
+            {
+                return BadRequest(new { error = "Координаты некорректны" });
+            }
+
+            // Проверяем, заняты ли координаты другим водителем
+            if (_driverService.IsCoordinateOccupied(request.X, request.Y, request.Id))
+            {
+                return BadRequest(new { error = "Здесь уже находится другой водитель" });
+            }
+
+            var existingDriver = _driverService.GetDriverById(request.Id);
+            bool isUpdate = existingDriver != null;
+
+            // Обновляем координаты
+            bool success = _driverService.UpdateDriverCoordinates(
+                request.Id, request.X, request.Y, _mapSettings.N, _mapSettings.M);
+
+            if (!success)
+            {
+                return BadRequest(new { error = "Не удалось обновить координаты" });
+            }
+
+            string message = isUpdate ? "Координаты успешно изменены" : "Координаты успешно добавлены";
+            return Ok(new { message = message });
+        }
+
+        [HttpPost("findnearests")]
         public ActionResult<List<Driver>> FindNearestQuickSelect([FromBody] Order order)
         {
-            var drivers = GetTestDrivers();
+            var drivers = _driverService.GetAllDrivers();
             var result = _quickSelectNearest.FindDrivers(drivers, order, 5);
             return Ok(result);
         }
 
-        [HttpPost("nearest/radiusexpansion")]
-        public ActionResult<List<Driver>> FindNearestRadiusExpansion([FromBody] Order order)
+        [HttpGet]
+        public ActionResult<List<Driver>> GetAllDrivers()
         {
-            var drivers = GetTestDrivers();
-            var result = _radiusExpansionNearest.FindDrivers(drivers, order, 5);
-            return Ok(result);
+            var drivers = _driverService.GetAllDrivers();
+            return Ok(drivers);
         }
 
-        // Тестовый набор водителей
-        private List<Driver> GetTestDrivers()
+        [HttpGet("{id}")]
+        public ActionResult<Driver> GetDriverById(int id)
         {
-            return new List<Driver>
+            var driver = _driverService.GetDriverById(id);
+            if (driver == null)
             {
-            new Driver { Id = 1, X = 1, Y = 1 },
-            new Driver { Id = 2, X = 5, Y = 5 },
-            new Driver { Id = 3, X = 10, Y = 10 },
-            new Driver { Id = 4, X = 2, Y = 2 },
-            new Driver { Id = 5, X = 8, Y = 8 },
-            new Driver { Id = 6, X = 15, Y = 15 },
-            new Driver { Id = 7, X = 3, Y = 3 },
-            new Driver { Id = 8, X = 12, Y = 12 },
-            new Driver { Id = 9, X = 7, Y = 7 },
-            new Driver { Id = 10, X = 4, Y = 4 }
-            };
+                return NotFound();
+            }
+            return Ok(driver);
         }
     }
 }

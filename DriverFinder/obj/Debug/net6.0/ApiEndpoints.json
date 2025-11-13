@@ -1,18 +1,12 @@
 [
   {
     "ContainingType": "DriverFinder.Controllers.DriversController",
-    "Method": "FindNearestBruteFouce",
-    "RelativePath": "api/drivers/nearest/bruteforce",
-    "HttpMethod": "POST",
+    "Method": "GetAllDrivers",
+    "RelativePath": "api/drivers",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "order",
-        "Type": "DriverFinder.Models.Order",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.List\u00601[[DriverFinder.Models.Driver, DriverFinder, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
@@ -27,21 +21,21 @@
   },
   {
     "ContainingType": "DriverFinder.Controllers.DriversController",
-    "Method": "FindNearestPriorityQueue",
-    "RelativePath": "api/drivers/nearest/priorityqueue",
-    "HttpMethod": "POST",
+    "Method": "GetDriverById",
+    "RelativePath": "api/drivers/{id}",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "order",
-        "Type": "DriverFinder.Models.Order",
+        "Name": "id",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[DriverFinder.Models.Driver, DriverFinder, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "DriverFinder.Models.Driver",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -50,11 +44,43 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "DriverFinder.Controllers.DriversController",
+    "Method": "AssignDriverToOrder",
+    "RelativePath": "api/drivers/assign",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderRequest",
+        "Type": "DriverFinder.Models.OrderRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "DriverFinder.Controllers.DriversController",
+    "Method": "UpdateDriverCoordinates",
+    "RelativePath": "api/drivers/coordinates",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "DriverFinder.Models.UpdateDriverCoordinatesRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "DriverFinder.Controllers.DriversController",
     "Method": "FindNearestQuickSelect",
-    "RelativePath": "api/drivers/nearest/quickselect",
+    "RelativePath": "api/drivers/findnearests",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -78,29 +104,13 @@
     ]
   },
   {
-    "ContainingType": "DriverFinder.Controllers.DriversController",
-    "Method": "FindNearestRadiusExpansion",
-    "RelativePath": "api/drivers/nearest/radiusexpansion",
-    "HttpMethod": "POST",
+    "ContainingType": "DriverFinder.Controllers.StatusController",
+    "Method": "GetRequestStatus",
+    "RelativePath": "api/status/requests",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "order",
-        "Type": "DriverFinder.Models.Order",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[DriverFinder.Models.Driver, DriverFinder, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "Parameters": [],
+    "ReturnTypes": []
   }
 ]

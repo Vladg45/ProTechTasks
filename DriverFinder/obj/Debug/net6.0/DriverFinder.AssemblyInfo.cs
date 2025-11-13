@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DriverFinder")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e15971d4247ff60e261742354e26ccc280e905c8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3733d90c939d1b620ab311f49dfc0f101dfdab26")]
 [assembly: System.Reflection.AssemblyProductAttribute("DriverFinder")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DriverFinder")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
