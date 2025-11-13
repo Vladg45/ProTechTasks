@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>DriverFinder.Benchmarks.AlgorithmBenchmarks-20251112-232105</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet v0.15.6, Windows 11 (10.0.26100.7171/24H2/2024Update/HudsonValley)
+AMD Ryzen 5 6600H with Radeon Graphics 3.30GHz, 1 CPU, 12 logical and 6 physical cores
+.NET SDK 9.0.204
+  [Host]     : .NET 6.0.36 (6.0.36, 6.0.3624.51421), X64 RyuJIT x86-64-v3
+  Job-WRIKEU : .NET 6.0.36 (6.0.36, 6.0.3624.51421), X64 RyuJIT x86-64-v3
+</code></pre>
+<pre><code>IterationCount=5  LaunchCount=1  WarmupCount=2  
+</code></pre>
+
+<table>
+<thead><tr><th>Method          </th><th>Count</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Gen0</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>BruteForceNearest</td><td>5</td><td>8.639 &mu;s</td><td>0.4662 &mu;s</td><td>0.0721 &mu;s</td><td>0.1526</td><td>16400 B</td>
+</tr><tr><td>PriorityQueueNearest</td><td>5</td><td>8.173 &mu;s</td><td>0.1830 &mu;s</td><td>0.0475 &mu;s</td><td>-</td><td>528 B</td>
+</tr><tr><td>QuickSelectNearest</td><td>5</td><td>2.750 &mu;s</td><td>0.0442 &mu;s</td><td>0.0115 &mu;s</td><td>0.0801</td><td>8624 B</td>
+</tr><tr><td>RadiusExpansionNearest</td><td>5</td><td>31.109 &mu;s</td><td>0.8052 &mu;s</td><td>0.2091 &mu;s</td><td>0.2441</td><td>31336 B</td>
+</tr><tr><td>BruteForceNearest</td><td>10</td><td>8.761 &mu;s</td><td>0.0924 &mu;s</td><td>0.0240 &mu;s</td><td>0.1526</td><td>16440 B</td>
+</tr><tr><td>PriorityQueueNearest</td><td>10</td><td>9.646 &mu;s</td><td>0.1389 &mu;s</td><td>0.0361 &mu;s</td><td>-</td><td>960 B</td>
+</tr><tr><td>QuickSelectNearest</td><td>10</td><td>2.673 &mu;s</td><td>0.0559 &mu;s</td><td>0.0145 &mu;s</td><td>0.0801</td><td>8736 B</td>
+</tr><tr><td>RadiusExpansionNearest</td><td>10</td><td>32.710 &mu;s</td><td>0.7013 &mu;s</td><td>0.1821 &mu;s</td><td>0.2441</td><td>31528 B</td>
+</tr><tr><td>BruteForceNearest</td><td>20</td><td>9.537 &mu;s</td><td>0.1221 &mu;s</td><td>0.0317 &mu;s</td><td>0.1526</td><td>16520 B</td>
+</tr><tr><td>PriorityQueueNearest</td><td>20</td><td>12.365 &mu;s</td><td>0.6200 &mu;s</td><td>0.0959 &mu;s</td><td>0.0153</td><td>1776 B</td>
+</tr><tr><td>QuickSelectNearest</td><td>20</td><td>3.173 &mu;s</td><td>0.0847 &mu;s</td><td>0.0220 &mu;s</td><td>0.0839</td><td>8976 B</td>
+</tr><tr><td>RadiusExpansionNearest</td><td>20</td><td>33.256 &mu;s</td><td>1.2932 &mu;s</td><td>0.3358 &mu;s</td><td>0.2441</td><td>31888 B</td>
+</tr></tbody></table>
+</body>
+</html>
